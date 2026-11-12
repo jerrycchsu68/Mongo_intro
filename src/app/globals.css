@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f2ede3;
+  --ink: #1d2318;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: #6e6a5d;
+  --color-mango: #d9622b;
+  --color-leaf: #2c4128;
+  --font-sans: var(--font-geist-sans), "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+  --font-serif: var(--font-noto-serif-tc), "Songti TC", "PMingLiU", serif;
+  --font-en: var(--font-cormorant), Georgia, serif;
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* 紙張紋理 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.45  0 0 0 0 0.4  0 0 0 0 0.3  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* 水果名稱跑馬燈 */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee { animation: marquee 40s linear infinite; }
+
+/* 亮面球體緩慢浮動 */
+@keyframes drift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.drift { animation: drift 7s ease-in-out infinite; }
+
+/* 捲動淡入：元素進入畫面時由下往上浮現。
+   用瀏覽器原生的捲動動畫，不支援的瀏覽器會直接顯示內容。 */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(48px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+  }
+}
+
+/* 彈出視窗開啟動畫 */
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  dialog.modal[open] { animation: modal-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  dialog.modal[open]::backdrop { animation: backdrop-in 0.3s ease-out; }
+}
+
+/* 歡迎文字出現動畫 */
+@keyframes welcome-in {
+  from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .welcome-in { animation: welcome-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both; }
+}
+
+/* 抽獎浮動按鈕：每隔幾秒輕輕晃一下，吸引注意 */
+@keyframes fab-nudge {
+  0%, 88%, 100% { transform: rotate(0); }
+  91% { transform: rotate(-6deg); }
+  94% { transform: rotate(5deg); }
+  97% { transform: rotate(-3deg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lottery-fab { animation: fab-nudge 6s ease-in-out infinite; }
+  .lottery-fab:hover { animation: none; }
+}
+
+/* 手機左右滑動區塊隱藏捲軸 */
+.no-scrollbar { scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee, .drift { animation: none; }
+}
