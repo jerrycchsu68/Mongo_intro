@@ -14,7 +14,7 @@ const orderLink = (item: string) =>
 
 const varieties = [
   {
-    name: "愛文芒果促銷",
+    name: "愛文芒果促銷777",
     en: "Irwin",
     season: "6 – 7 月",
     img: "/images/mango.jpg",
